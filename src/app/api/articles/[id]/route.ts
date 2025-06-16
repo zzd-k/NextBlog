@@ -1,6 +1,6 @@
 import db from "@/db"
 import { NextResponse } from "next/server"
-
+ import '@ant-design/v5-patch-for-react-19';
 interface IParams {
   params: {
     id: string
@@ -8,30 +8,30 @@ interface IParams {
 }
 // DELETE=> /api/articles/:id 
 export async function DELETE(request: Request, { params }: IParams) {
-  await db.update(({ posts }) =>  {
-  const idx=  posts.findIndex(post => post.id === params.id)
-  posts.splice(idx, 1)
+  await db.update(({ posts }) => {
+    const idx = posts.findIndex(post => post.id === params.id)
+    posts.splice(idx, 1)
   })
 
- return NextResponse.json({
-  code: 0,
-  message: "删除成功"
- })
+  return NextResponse.json({
+    code: 0,
+    message: "删除成功"
+  })
 }
 // PATCH=> /api/articles/:id
 export async function PATCH(request: Request, { params }: IParams) {
-   
-const data=await request.json()
-let idx=-1
-await db.update(({ posts }) =>  {
-   idx=  posts.findIndex(post => post.id === params.id)
-  posts[idx]={...posts[idx],...data}
+
+  const data = await request.json()
+  let idx = -1
+  await db.update(({ posts }) => {
+    idx = posts.findIndex(post => post.id === params.id)
+    posts[idx] = { ...posts[idx], ...data }
   })
-   return NextResponse.json({
-  code: 0,
-  message: "修改成功",
-  data:db.data.posts[idx]
- })
+  return NextResponse.json({
+    code: 0,
+    message: "修改成功",
+    data: db.data.posts[idx]
+  })
 }
 // GET=> /api/articles/:id
 export async function GET(request: Request, { params }: IParams) {
